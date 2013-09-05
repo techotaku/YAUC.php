@@ -1,0 +1,25 @@
+{
+    "name": "techotaku/yauc",
+    "description": "Yet Another User Center",
+    "keywords": ["sso", "user"],
+    "homepage": "https://github.com/techotaku/YAUC.php",
+    "authors": [
+        {
+            "name": "Ian LI",
+            "homepage": "http://www.techotaku.net",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/techotaku/YAUC.php/issues"
+    },
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {"Yauc\\": ""}
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "0.3.*@dev"
+    }
+}
