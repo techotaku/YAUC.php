@@ -8,6 +8,6 @@ class Welcome extends Base
 {
   protected function index()
   {
-    echo file_get_contents(VIEW_DIR.'Welcome/index.html');
+    echo file_get_contents(VIEW_DIR.'Welcome'.DIRECTORY_SEPARATOR.'index.html');
   }
 }
