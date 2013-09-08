@@ -10,6 +10,7 @@ class ClientRepository
 
   public function __construct()
   {
+    // @fake
     $this->clients = array(
       'demo1' => array(
         'secret' => '',
@@ -40,5 +41,16 @@ class ClientRepository
       $callback = $this->clients[strtolower($client)]['callback'];
       return str_replace('{ticket}', $ticket, $callback);
     }
+  }
+
+  public function makeTicket($client, $user)
+  {
+    if ($user == NULL)
+    {
+      throw new \Exception('Cannot generate client ticket for unknown (NULL) user.');
+    }
+
+    // @fake 需要进一步的混淆、加密处理
+    return 'ticket-'.$client.'-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.rand(10000000, 99999999).'-'.$user['uid'];
   }
 }

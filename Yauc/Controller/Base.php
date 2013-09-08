@@ -7,22 +7,20 @@ namespace Yauc\Controller;
 class Base
 {
   protected $route;
-  protected $serviceLocator;
 
-  public static function getController($route, $serviceLocator = null)
+  public static function getController($route)
   {
-    $controller ="\\Yauc\\Controller\\" . $route->controller;
+    $controller = "Yauc\\Controller\\".$route->controller;
     if (class_exists($controller)) {
-      return new $controller($route, $serviceLocator);
+      return new $controller($route);
     } else {
-      exit('Specified controller <b><i>'.$route->controller.'</i></b> not found.');
+      echo 'Specified controller <b><i>'.$route->controller.'</i></b> not found.';
     }
   }
 
-  public function __construct($route, $serviceLocator = null)
+  public function __construct($route)
   {
     $this->route = $route;
-    $this->serviceLocator = $serviceLocator;
   }
 
   public function run()
@@ -32,21 +30,9 @@ class Base
     if (method_exists($this, $method)) {
       $this->$method();
     } else {
-      exit('Specified action <b><i>'.$this->route->action.'</i></b> not found.');
+      echo 'Specified action <b><i>'.$this->route->action.'</i></b> not found.';
     }
     $this->after();
-  }
-
-  protected function getService($service, $interface = '')
-  {
-    if (!isset($this->dependencies[$service])) {
-      return FALSE;
-    }
-    if ($interface != '' && !($this->dependencies[$service] instanceof $interface)) {
-      return FALSE;
-    }
-
-    return $this->dependencies[$service];
   }
 
   protected function before()

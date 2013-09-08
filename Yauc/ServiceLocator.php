@@ -6,6 +6,8 @@ namespace Yauc;
  */
 class ServiceLocator
 {
+  private static $_instance;
+
   private $registeredServices;
   private $services;
 
@@ -13,6 +15,15 @@ class ServiceLocator
   {
     $this->registeredServices = array();
     $this->services = array();
+  }
+
+  public static function instance()
+  {
+    if (!is_object(self::$_instance))
+    {
+      self::$_instance = new ServiceLocator();
+    }
+    return self::$_instance; 
   }
 
   public function registerService($serviceName, $className, array $parameters = array())
@@ -36,7 +47,7 @@ class ServiceLocator
         }        
       }
       
-      return FALSE;
+      throw new \Exception('Cannot locate specified service: '.$serviceName.'. Service has not been registered or failed to initialize.');
     } else {
       return $this->services[$serviceName];
     }
