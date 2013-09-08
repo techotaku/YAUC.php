@@ -43,7 +43,7 @@ class Login extends Base
         $tokenMgr = ServiceLocator::instance()->getService('token');
 
         // 从数据库读取用户信息
-        $user = $users->getUserByName($username);
+        $user = $users->getUserByBasic($username);
 
         // 生成用户本次登陆的会话信息并写入Cookies
         // @fake 需要混淆

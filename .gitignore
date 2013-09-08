@@ -33,3 +33,4 @@ composer.lock
 
 .coveralls.yml
 .deployment/
+Config/
