@@ -15,7 +15,8 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "j4mie/idiorm": ">=1.4.0"
+        "j4mie/idiorm": ">=1.4.0",
+        "smarty/smarty": ">=3.1.14"
     },
     "autoload": {
         "psr-0": {"Yauc\\": ""}

@@ -1,9 +1,3 @@
-<html>
-  <head>
-    <title>注册 - Yet Another User Center</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body>
     <form action="/Welcome/save" method="post">
       用户名：
       <input type="text" name="username" />
@@ -15,5 +9,3 @@
       <input type="text" name="email" />
       <input type="submit" value="注册" />
     </form>
-  </body>
-</html>

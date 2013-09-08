@@ -10,6 +10,8 @@ class Login extends Base
 
   protected function form()
   {
+    $this->smarty = ServiceLocator::instance()->getService('smarty');
+
     $tokenMgr = ServiceLocator::instance()->getService('token');
     if ($tokenMgr->isValidUser())
     {
@@ -19,12 +21,10 @@ class Login extends Base
 
     $client = $this->route->params;
 
-    // @fake
-    $content = file_get_contents(VIEW_DIR.'Login'.DIRECTORY_SEPARATOR.'basic.html');
-    $content = str_replace('{{title}}', '登陆 - Yet Another User Center', $content);
-    $content = str_replace('{{action}}', '/Login/basic', $content);
-    $content = str_replace('{{client}}', $client, $content);
-    echo $content;
+    $this->smarty->assign('content', 'Login'.DIRECTORY_SEPARATOR.'basic.inc.tpl');
+    $this->smarty->assign('title', '登陆 - Yet Another User Center');
+    $this->smarty->assign('action', '/Login/basic');
+    $this->smarty->assign('client', $client);
   }
 
   protected function basic()

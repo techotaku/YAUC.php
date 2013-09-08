@@ -34,3 +34,7 @@ composer.lock
 .coveralls.yml
 .deployment/
 Config/
+
+#Smarty
+templates_c/
+cache/

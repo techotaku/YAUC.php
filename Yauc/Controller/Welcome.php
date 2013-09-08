@@ -7,14 +7,26 @@ use Yauc\ServiceLocator;
  */
 class Welcome extends Base
 {
+  protected function before()
+  {
+    $this->smarty = ServiceLocator::instance()->getService('smarty');
+  }
+
   protected function index()
   {
-    echo file_get_contents(VIEW_DIR.'Welcome'.DIRECTORY_SEPARATOR.'index.html');
+    $tokenMgr = ServiceLocator::instance()->getService('token');
+    $this->smarty->assign('content', 'Welcome'.DIRECTORY_SEPARATOR.'index.inc.tpl');
+    $this->smarty->assign('title', '首页 - Yet Another User Center');
+    if ($tokenMgr->isValidUser())
+    {
+      $this->smarty->assign('user', $tokenMgr->getUserFromCookies());
+    }
   }
 
   protected function register()
   {
-    echo file_get_contents(VIEW_DIR.'Welcome'.DIRECTORY_SEPARATOR.'new.html');
+    $this->smarty->assign('content', 'Welcome'.DIRECTORY_SEPARATOR.'new.inc.tpl');
+    $this->smarty->assign('title', '注册 - Yet Another User Center');
   }
 
   protected function save()
@@ -30,17 +42,9 @@ class Welcome extends Base
     $id = $users->newUser($display, $email);
     $users->newIdentityBasic($id, $username, $password);
 
-    echo '
-<html>
-  <head>
-    <title>注册 - Yet Another User Center</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-  <body>
-  注册成功。
-  </body>
-</html>
-';
-
+    $this->smarty = ServiceLocator::instance()->getService('smarty');
+    $this->smarty->assign('content', 'message.inc.tpl');
+    $this->smarty->assign('title', '注册 - Yet Another User Center');
+    $this->smarty->assign('message', '注册成功。');
   }
 }
