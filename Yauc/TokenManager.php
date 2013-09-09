@@ -1,5 +1,6 @@
 <?php
 namespace Yauc;
+use ORM;
 
 /**
  * Token Manager
@@ -23,6 +24,19 @@ class TokenManager
     $this->domain = $domain;
     $this->secure = $secure;
     $this->httponly = $httponly;
+
+    $config = ServiceLocator::instance()->getService('config');
+    $dbcfg = $config->load('database');
+    ORM::configure('mysql:host='.$dbcfg['server'].';dbname='.$dbcfg['database'].';charset=utf8');
+    ORM::configure('username', $dbcfg['username']);
+    ORM::configure('password', $dbcfg['password']);
+    ORM::configure('return_result_sets', true);
+    ORM::configure('id_column_overrides', array(
+      'sessions' => 'sid',
+      'users' => 'uid',
+      'identity_basic' => 'uid',
+      'tickets' => 'ticket'
+    ));
   }
 
   public function isValidUser()
@@ -76,7 +90,7 @@ class TokenManager
       'expire' => $expire);
   }
 
-  public function writeUser($user = NULL)
+  public function saveCurrentSession($user = NULL)
   {
     if ($user == NULL)
     {
@@ -92,7 +106,23 @@ class TokenManager
     {
       return FALSE;
     }
+    $session = ORM::for_table('sessions')->create();
+    $session->set('sid', $user['sid']);
+    $session->set('uid', $user['uid']);
+    $session->set('expire', time() + $this->expire);
+    $session->save();
+
     return setcookie($this->key, $cookie, time() + $this->expire, $this->path, $this->domain, $this->secure, $this->httponly);
   }
 
+  public function clearCurrentSession()
+  {
+    if ($this->user != NULL)
+    {
+      $session = ORM::for_table('sessions')->find_one($this->user['sid']);
+      $session->delete();
+    }
+
+    return setcookie($this->key, '', time() - 3600, $this->path, $this->domain, $this->secure, $this->httponly);
+  }
 }

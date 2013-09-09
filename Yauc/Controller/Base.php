@@ -38,6 +38,8 @@ class Base
 
   protected function before()
   {
+    header('Pragma: no-cache');
+    header('Expires: '.gmdate('D, d M Y H:i:s \G\M\T', time() - 3600));
   }
 
   protected function after()

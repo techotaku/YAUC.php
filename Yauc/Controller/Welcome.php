@@ -9,6 +9,8 @@ class Welcome extends Base
 {
   protected function before()
   {
+    parent::before();
+    
     $this->smarty = ServiceLocator::instance()->getService('smarty');
   }
 

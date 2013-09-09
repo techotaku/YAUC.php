@@ -16,7 +16,12 @@ class UserRepository
     ORM::configure('username', $dbcfg['username']);
     ORM::configure('password', $dbcfg['password']);
     ORM::configure('return_result_sets', true);
-    ORM::configure('id_column', 'uid');
+    ORM::configure('id_column_overrides', array(
+      'sessions' => 'sid',
+      'users' => 'uid',
+      'identity_basic' => 'uid',
+      'tickets' => 'ticket'
+    ));
   }
 
   public function newUser($display, $email)

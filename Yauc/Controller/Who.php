@@ -25,8 +25,11 @@ class Who extends Base
       $tokenMgr = ServiceLocator::instance()->getService('token');
       if ($tokenMgr->isValidUser())
       {
-        $ticket = $clients->makeTicket($this->client, $tokenMgr->getUserFromCookies());
-        $this->redirect($clients->getCallbackUrl($this->client, $ticket));
+        $user = $tokenMgr->getUserFromCookies();
+        $ticket = $clients->makeTicket($this->client, $user);
+        $clients->saveTicket($this->client, $user, $ticket);
+
+        $this->redirect($clients->getLoginCallbackUrl($this->client, $ticket));
       } else {
         $this->redirect('/Login/form/'.$this->client);
       }

@@ -46,14 +46,28 @@ class Login extends Base
         $user = $users->getUserByBasic($username);
 
         // 生成用户本次登陆的会话信息并写入Cookies
-        // @fake 需要混淆
-        $sid = 'session-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.rand(10000000, 99999999).'-'.$user['uid'];
+        // 生成一个最长不到50位的sid字符串
+        $sid = 's'.substr(uniqid(rand()), -3).'-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.$user['uid'];
+        // 编码，一个蛋疼的基于base64的混淆处理，编码后长度最长约70位，MySQL表该字段预留80位
+        $sid = base64_encode($sid);
+        if (substr($sid, -2) == '==')
+        {
+          $sid = '5.'.$sid;
+        } elseif (substr($sid, -1) == '=') {
+          $sid = '1.'.$sid;
+        } else {
+          $sid = '6.'.$sid;
+        }
+        $sid = rtrim($sid, '=').'.';
+
         $tokenMgr->initUser($sid, $user['uid'], $username, $user['display']);
-        $tokenMgr->writeUser();
+        $tokenMgr->saveCurrentSession();
 
         // 生成Client Ticket并跳转回Client
         $ticket = $clients->makeTicket($client, $user);
-        $this->redirect($clients->getCallbackUrl($client, $ticket));
+        $clients->saveTicket($client, $user, $ticket);
+
+        $this->redirect($clients->getLoginCallbackUrl($client, $ticket));
       } else {
         // 登陆失败
         $this->redirect('/Login/form/'.$client);
