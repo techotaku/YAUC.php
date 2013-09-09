@@ -26,8 +26,8 @@ class Who extends Base
       if ($tokenMgr->isValidUser())
       {
         $user = $tokenMgr->getUserFromCookies();
-        $ticket = $clients->makeTicket($this->client, $user);
-        $clients->saveTicket($this->client, $user, $ticket);
+        $ticket = $tokenMgr->makeTicket($this->client, $user);
+        $tokenMgr->saveTicket($this->client, $user, $ticket);
 
         $this->redirect($clients->getLoginCallbackUrl($this->client, $ticket));
       } else {

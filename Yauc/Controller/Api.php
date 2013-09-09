@@ -8,23 +8,6 @@ use ORM;
  */
 class Api extends Base
 {
-  protected function before()
-  {
-    parent::before();
-
-    $config = ServiceLocator::instance()->getService('config');
-    $dbcfg = $config->load('database');
-    ORM::configure('mysql:host='.$dbcfg['server'].';dbname='.$dbcfg['database'].';charset=utf8');
-    ORM::configure('username', $dbcfg['username']);
-    ORM::configure('password', $dbcfg['password']);
-    ORM::configure('return_result_sets', true);
-    ORM::configure('id_column_overrides', array(
-      'sessions' => 'sid',
-      'users' => 'uid',
-      'identity_basic' => 'uid',
-      'tickets' => 'ticket'
-    ));
-  }
 
   protected function user()
   {
@@ -42,29 +25,19 @@ class Api extends Base
     sort($signArray);
     if (sha1(implode($signArray)) == $signature)
     {
-      $t = ORM::for_table('tickets')->find_one($ticket);
-      if ($t === FALSE)
+      $tokenMgr = ServiceLocator::instance()->getService('token');
+      // 效验Ticket，同时删除Ticket
+      if (($uid = $tokenMgr->isValidTicket($ticket)) === FALSE)
       {
-        echo '指定的Ticket不存在。';
-      } elseif (time() >= intval($t->expire)) {
-        echo '指定的Ticket已过期。';
-        $t->delete();
+        echo '指定的Ticket无效。';
       } else {
-        // Ticket存在且仍然有效
         $users = ServiceLocator::instance()->getService('users');
-        $user = $users->getUserById($t->uid);        
+        $user = $users->getUserById($uid);
         echo json_encode($user);
-        $t->delete();
-      }      
+      }
     } else {
       echo '请求非法。';
     }
   }
-
-  protected function session()
-  {
-
-  }
-
 
 }

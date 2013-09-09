@@ -64,8 +64,8 @@ class Login extends Base
         $tokenMgr->saveCurrentSession();
 
         // 生成Client Ticket并跳转回Client
-        $ticket = $clients->makeTicket($client, $user);
-        $clients->saveTicket($client, $user, $ticket);
+        $ticket = $tokenMgr->makeTicket($client, $user);
+        $tokenMgr->saveTicket($client, $user, $ticket);
 
         $this->redirect($clients->getLoginCallbackUrl($client, $ticket));
       } else {

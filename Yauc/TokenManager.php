@@ -125,4 +125,38 @@ class TokenManager
 
     return setcookie($this->key, '', time() - 3600, $this->path, $this->domain, $this->secure, $this->httponly);
   }
+
+  public function makeTicket($client, $user)
+  {
+    return hash('sha256', $client.'-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.substr(uniqid(rand()), -8).'-'.$user['uid']);
+  }
+
+  public function saveTicket($client, $user, $ticket)
+  {
+    $t = ORM::for_table('tickets')->create();
+    $t->set('ticket', $ticket);
+    $t->set('client', $client);
+    $t->set('uid', $user['uid']);
+    // Client Ticket 五分钟内有效
+    $t->set('expire', time() + 300);
+    $t->save();
+  }
+
+  public function isValidTicket($ticket)
+  {
+    $t = ORM::for_table('tickets')->find_one($ticket);
+    if ($t === FALSE)
+    {
+      // Ticket不存在
+      return FALSE;
+    } elseif (time() >= intval($t->expire)) {
+      // Ticket已过期
+      $t->delete();
+      return FALSE;
+    } else {
+      // Ticket存在且仍然有效
+      $t->delete();
+      return $t->uid;
+    }
+  }
 }

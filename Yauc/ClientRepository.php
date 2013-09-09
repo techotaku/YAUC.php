@@ -1,6 +1,5 @@
 <?php
 namespace Yauc;
-use ORM;
 
 /**
  * SSO Clients Repository
@@ -59,19 +58,4 @@ class ClientRepository
     return $this->clients[strtolower($client)]['logout'];
   }
 
-  public function makeTicket($client, $user)
-  {
-    return hash('sha256', $client.'-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.substr(uniqid(rand()), -8).'-'.$user['uid']);
-  }
-
-  public function saveTicket($client, $user, $ticket)
-  {
-    $t = ORM::for_table('tickets')->create();
-    $t->set('ticket', $ticket);
-    $t->set('client', $client);
-    $t->set('uid', $user['uid']);
-    // Client Ticket 五分钟内有效
-    $t->set('expire', time() + 300);
-    $t->save();
-  }
 }
