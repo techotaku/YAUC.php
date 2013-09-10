@@ -11,6 +11,7 @@ $locator->registerService('config', "Yauc\\ConfigManager");
 $locator->registerService('route', "Yauc\\Router");
 $locator->registerService('clients', "Yauc\\ClientRepository");
 $locator->registerService('users', "Yauc\\UserRepository");
+$locator->registerService('discuz', "Yauc\\DiscuzConnector");
 $locator->registerService('token', "Yauc\\TokenManager", array('sso', 3600, '/'));
 $locator->registerService('smarty', "\\Smarty");
 

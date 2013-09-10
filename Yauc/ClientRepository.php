@@ -18,6 +18,11 @@ class ClientRepository
     return array_key_exists(strtolower($client), $this->clients);
   }
 
+  public function getClients()
+  {
+    return $this->clients;
+  }
+
   public function getSecret($client)
   {
     if (!array_key_exists(strtolower($client), $this->clients))

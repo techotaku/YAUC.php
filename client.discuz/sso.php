@@ -18,7 +18,7 @@ $discuz->init();
 require DISCUZ_ROOT.'/config/config_ucenter.php';
 
 // sso系统中定义的client
-define('CLIENT', 'demodz');
+define('CLIENT', '');
 // 这里直接使用UC_KEY作为secret
 define('SECRET', UC_KEY);
 
@@ -43,7 +43,7 @@ class SsoClient
 
   public function login()
   {
-    $this->redirect('http://sso.techotaku.net/Who/demodz');
+    $this->redirect('http://sso.techotaku.net/Who/'.CLIENT);
   }
 
   public function login_callback()
@@ -58,7 +58,7 @@ class SsoClient
     $opts = $this->CURL_OPTS;
     $opts[CURLOPT_URL] = 'http://sso.techotaku.net/Api/user';
     $opts[CURLOPT_CUSTOMREQUEST] = 'POST';
-    $data = array('client' =>'demodz',
+    $data = array('client' => CLIENT,
               'ticket' => $ticket,
               'timestamp' => $timestamp,
               'nonce' => $nonce,
@@ -86,8 +86,9 @@ class SsoClient
       $uid = $user['uid'];
       if(($member = getuserbyuid($uid, 1))) {
         dsetcookie('auth', authcode("$member[password]\t$member[uid]", 'ENCODE'), $cookietime);
+        // 显示提示，并登陆其他站点
+        showmessage('登陆成功，正在跳转……', 'forum.php', array(), array('showdialog' => true, 'extrajs' => $user['script']));
       }
-      $this->redirect('/');
     }
   }
 

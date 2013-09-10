@@ -32,6 +32,8 @@ class Api extends Base
       } else {
         $users = ServiceLocator::instance()->getService('users');
         $user = $users->getUserById($uid);
+        $discuz = ServiceLocator::instance()->getService('discuz');
+        $user['script'] = $discuz->getSyncScripts($client, $uid);
         echo json_encode($user);
       }
     } else {

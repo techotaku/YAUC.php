@@ -43,6 +43,13 @@ class Welcome extends Base
     $id = $users->newUser($username, $email);
     $users->newIdentityBasic($id, $email, $password);
 
+    $discuz = ServiceLocator::instance()->getService('discuz');
+    $user = array(
+      'uid' => $id,
+      'username' => $username,
+      'email' => $email);
+    $discuz->register($user);
+
     $this->smarty = ServiceLocator::instance()->getService('smarty');
     $this->smarty->assign('content', 'message.inc.tpl');
     $this->smarty->assign('title', '注册 - Yet Another User Center');
