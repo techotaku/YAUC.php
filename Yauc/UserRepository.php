@@ -11,32 +11,22 @@ class UserRepository
   public function __construct()
   {
     $config = ServiceLocator::instance()->getService('config');
-    $dbcfg = $config->load('database');
-    ORM::configure('mysql:host='.$dbcfg['server'].';dbname='.$dbcfg['database'].';charset=utf8');
-    ORM::configure('username', $dbcfg['username']);
-    ORM::configure('password', $dbcfg['password']);
-    ORM::configure('return_result_sets', true);
-    ORM::configure('id_column_overrides', array(
-      'sessions' => 'sid',
-      'users' => 'uid',
-      'identity_basic' => 'uid',
-      'tickets' => 'ticket'
-    ));
+    $config->db();
   }
 
-  public function newUser($display, $email)
+  public function newUser($username, $email)
   {
     // TODO: 需要异常处理封装
 
     $user = ORM::for_table('users')->create();
-    $user->set('display', $display);
+    $user->set('username', $username);
     // email的唯一性验证需要在Controller中完成
     $user->set('email', $email);
     $user->save();
     return $user->id();
   }
 
-  public function newIdentityBasic($uid, $username, $password)
+  public function newIdentityBasic($uid, $loginname, $password)
   {
     // TODO: 需要异常处理封装
 
@@ -44,17 +34,18 @@ class UserRepository
     $password = hash('sha256', $salt.$password);
     $identity = ORM::for_table('identity_basic')->create();
     $identity->set('uid', $uid);
-    // username的唯一性验证需要在Controller中完成
-    $identity->set('username', $username);
+    // loginname的唯一性验证需要在Controller中完成
+    // 关于登录名：保持验证模块与主用户数据的分离，实际可以使用邮件地址
+    $identity->set('loginname', $loginname);
     $identity->set('password', $password);
     $identity->set('salt', $salt);
     $identity->save();
   }
 
-  public function validateBasic($username, $password)
+  public function validateBasic($loginname, $password)
   {
     $identity = ORM::for_table('identity_basic')
-      ->where('username', $username)
+      ->where('loginname', $loginname)
       ->find_one();
     if ($identity === FALSE)
     {
@@ -66,10 +57,10 @@ class UserRepository
     return $pwd == hash('sha256', $salt.$password);
   }
 
-  public function getUserByBasic($username)
+  public function getUserByBasic($loginname)
   {
     $user = ORM::for_table('identity_basic')
-      ->where('username', $username)
+      ->where('loginname', $loginname)
       ->join('users', array('identity_basic.uid', '=', 'users.uid'))
       ->find_one();
     if ($user === FALSE)
@@ -78,7 +69,7 @@ class UserRepository
     }
     return array(
       'uid' => $user->id(),
-      'display' => $user->display,
+      'username' => $user->username,
       'email' => $user->email);
   }
 
@@ -91,7 +82,7 @@ class UserRepository
     }
     return array(
       'uid' => $user->id(),
-      'display' => $user->display,
+      'username' => $user->username,
       'email' => $user->email);
   }
 

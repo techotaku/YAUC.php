@@ -26,17 +26,7 @@ class TokenManager
     $this->httponly = $httponly;
 
     $config = ServiceLocator::instance()->getService('config');
-    $dbcfg = $config->load('database');
-    ORM::configure('mysql:host='.$dbcfg['server'].';dbname='.$dbcfg['database'].';charset=utf8');
-    ORM::configure('username', $dbcfg['username']);
-    ORM::configure('password', $dbcfg['password']);
-    ORM::configure('return_result_sets', true);
-    ORM::configure('id_column_overrides', array(
-      'sessions' => 'sid',
-      'users' => 'uid',
-      'identity_basic' => 'uid',
-      'tickets' => 'ticket'
-    ));
+    $config->db();
   }
 
   public function isValidUser()
@@ -76,7 +66,7 @@ class TokenManager
     return $this->user;
   }
 
-  public function initUser($sid, $uid, $username, $displayedName, $expire = 0)
+  public function initUser($sid, $uid, $username, $loginname, $expire = 0)
   {
     if ($expire == 0)
     {
@@ -86,7 +76,7 @@ class TokenManager
       'sid' => $sid,
       'uid' => $uid,
       'username' => $username,
-      'display' => $displayedName,
+      'loginname' => $loginname,
       'expire' => $expire);
   }
 

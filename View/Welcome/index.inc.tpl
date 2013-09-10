@@ -1,5 +1,5 @@
 {if isset($user) }
-    SSO: 欢迎，{$user.display}。
+    SSO: 欢迎，{$user.username}。
 {else}
     SSO: Welcome, whatever you are. 
 {/if}

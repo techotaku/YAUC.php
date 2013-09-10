@@ -37,12 +37,11 @@ class Welcome extends Base
     // TODO: 此处为简化处理。表单密码提交之前应加密。
     $username = $_POST['username'];
     $password = $_POST['password'];
-    $display = $_POST['display'];
     $email = $_POST['email'];
 
     $users = ServiceLocator::instance()->getService('users');
-    $id = $users->newUser($display, $email);
-    $users->newIdentityBasic($id, $username, $password);
+    $id = $users->newUser($username, $email);
+    $users->newIdentityBasic($id, $email, $password);
 
     $this->smarty = ServiceLocator::instance()->getService('smarty');
     $this->smarty->assign('content', 'message.inc.tpl');

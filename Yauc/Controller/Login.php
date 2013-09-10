@@ -30,7 +30,7 @@ class Login extends Base
   protected function basic()
   {
     // TODO: 此处为简化处理。表单密码提交之前应加密。
-    $username = $_POST['username'];
+    $loginname = $_POST['loginname'];
     $password = $_POST['password'];
     $client = $_POST['client'];
 
@@ -38,12 +38,12 @@ class Login extends Base
     if ($clients->clientValid($client))
     {
       $users = ServiceLocator::instance()->getService('users');
-      if ($users->validateBasic($username, $password))
+      if ($users->validateBasic($loginname, $password))
       {
         $tokenMgr = ServiceLocator::instance()->getService('token');
 
         // 从数据库读取用户信息
-        $user = $users->getUserByBasic($username);
+        $user = $users->getUserByBasic($loginname);
 
         // 生成用户本次登陆的会话信息并写入Cookies
         // 生成一个最长不到50位的sid字符串
@@ -52,15 +52,17 @@ class Login extends Base
         $sid = base64_encode($sid);
         if (substr($sid, -2) == '==')
         {
-          $sid = '5.'.$sid;
+          $sid = rtrim($sid, '=');
+          $sid = $sid.'.5';
         } elseif (substr($sid, -1) == '=') {
-          $sid = '1.'.$sid;
+          $sid = rtrim($sid, '=');
+          $sid = $sid.'.1';
         } else {
-          $sid = '6.'.$sid;
+          $sid = $sid.'.6';
         }
-        $sid = rtrim($sid, '=').'.';
+        
 
-        $tokenMgr->initUser($sid, $user['uid'], $username, $user['display']);
+        $tokenMgr->initUser($sid, $user['uid'], $user['username'], $loginname);
         $tokenMgr->saveCurrentSession();
 
         // 生成Client Ticket并跳转回Client
