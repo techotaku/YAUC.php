@@ -1,7 +1,6 @@
 <?php
 namespace Yauc\Controller;
 use Yauc\ServiceLocator;
-use ORM;
 
 /**
  * Api controller

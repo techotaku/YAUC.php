@@ -10,17 +10,7 @@ class ClientRepository
 
   public function __construct()
   {
-    // @fake
-    $this->clients = array(
-      'demo1' => array(
-        'secret' => '6e5ed3be',
-        'login' => 'http://demo1.techotaku.net:8080/demo1/auth/{ticket}',
-        'logout' => 'http://demo1.techotaku.net:8080/demo1/index'),
-      'demo2' => array(
-        'secret' => '9fc7ccb0',
-        'login' => 'http://demo2.techotaku.net:8080/demo2/auth/{ticket}',
-        'logout' => 'http://demo2.techotaku.net:8080/demo2/index')
-      );
+    $this->clients = ServiceLocator::instance()->getService('config')->load('clients');
   }
 
   public function clientValid($client)

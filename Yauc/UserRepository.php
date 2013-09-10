@@ -10,8 +10,7 @@ class UserRepository
 
   public function __construct()
   {
-    $config = ServiceLocator::instance()->getService('config');
-    $config->db();
+    ServiceLocator::instance()->getService('config')->db();
   }
 
   public function newUser($username, $email)

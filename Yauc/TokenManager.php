@@ -25,8 +25,7 @@ class TokenManager
     $this->secure = $secure;
     $this->httponly = $httponly;
 
-    $config = ServiceLocator::instance()->getService('config');
-    $config->db();
+    ServiceLocator::instance()->getService('config')->db();
   }
 
   public function isValidUser()
