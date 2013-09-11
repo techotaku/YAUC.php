@@ -31,7 +31,6 @@ build/
 vendor/
 composer.lock
 
-.coveralls.yml
 .deployment/
 Config/
 
