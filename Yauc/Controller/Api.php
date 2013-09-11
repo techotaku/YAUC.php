@@ -8,7 +8,7 @@ use Yauc\ServiceLocator;
 class Api extends Base
 {
 
-  protected function user()
+  protected function login()
   {
     // TODO: 需要存在性效验
     $client = $_POST['client'];
@@ -32,10 +32,30 @@ class Api extends Base
       } else {
         $users = ServiceLocator::instance()->getService('users');
         $user = $users->getUserById($uid);
-        $discuz = ServiceLocator::instance()->getService('discuz');
-        $user['script'] = $discuz->getSyncScripts($client, $uid);
+        $user['script'] = $clients->getSyncLoginScripts($client, $uid);
         echo json_encode($user);
       }
+    } else {
+      echo '请求非法。';
+    }
+  }
+
+  protected function logout()
+  {
+    // TODO: 需要存在性效验
+    $client = $_POST['client'];
+    $signature = $_POST['signature'];
+
+    $clients = ServiceLocator::instance()->getService('clients');
+    $secret = $clients->getSecret($client);
+    $timestamp = $_POST['timestamp'];
+    $nonce = $_POST['nonce'];
+
+    $signArray = array($secret, $timestamp, $nonce);
+    sort($signArray);
+    if (sha1(implode($signArray)) == $signature)
+    {
+      echo $clients->getSyncLogoutScripts($client);
     } else {
       echo '请求非法。';
     }

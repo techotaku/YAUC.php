@@ -53,4 +53,48 @@ class ClientRepository
     return $this->clients[strtolower($client)]['logout'];
   }
 
+  public function getSyncLoginScripts($currentClient, $uid)
+  {
+    $discuz = ServiceLocator::instance()->getService('discuz');
+    $script = '';
+
+    foreach ($this->clients as $name => $info) {
+      if ($name == $currentClient)
+      {
+        continue;
+      }
+      if ($info['type'] == 'discuz')
+      {
+        $time = (string) time();
+        $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogin&uid='.$uid.'&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
+      } else {
+        // TODO: 暂缺
+        }
+    }
+
+    return $script;
+  }
+
+  public function getSyncLogoutScripts($currentClient)
+  {
+    $discuz = ServiceLocator::instance()->getService('discuz');
+    $script = '';
+
+    foreach ($this->clients as $name => $info) {
+      if ($name == $currentClient)
+      {
+        continue;
+      }
+      if ($info['type'] == 'discuz')
+      {
+        $time = (string) time();
+        $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogout&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
+      } else {
+        // TODO: 暂缺
+        }
+    }
+
+    return $script;
+  }
+
 }

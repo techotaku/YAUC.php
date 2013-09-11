@@ -56,7 +56,7 @@ class SsoClient
     $signature = sha1(implode($signArray));
 
     $opts = $this->CURL_OPTS;
-    $opts[CURLOPT_URL] = 'http://sso.techotaku.net/Api/user';
+    $opts[CURLOPT_URL] = 'http://sso.techotaku.net/Api/login';
     $opts[CURLOPT_CUSTOMREQUEST] = 'POST';
     $data = array('client' => CLIENT,
               'ticket' => $ticket,
@@ -100,7 +100,28 @@ class SsoClient
 
   public function logout_callback()
   {
-    $this->redirect('/');
+    $timestamp = (string) time();
+    $nonce = substr(uniqid(rand()), -8);
+    $signArray = array(SECRET, $timestamp, $nonce);
+    sort($signArray);
+    $signature = sha1(implode($signArray));
+
+    $opts = $this->CURL_OPTS;
+    $opts[CURLOPT_URL] = 'http://sso.techotaku.net/Api/logout';
+    $opts[CURLOPT_CUSTOMREQUEST] = 'POST';
+    $data = array('client' => CLIENT,
+              'timestamp' => $timestamp,
+              'nonce' => $nonce,
+              'signature' => $signature);
+
+    $opts[CURLOPT_POSTFIELDS] = http_build_query($data);
+
+    $ch = curl_init();
+    curl_setopt_array($ch, $opts);
+    $result = curl_exec($ch);
+
+    // 显示提示，并注销其他站点
+    showmessage('退出成功，正在跳转……', 'forum.php', array(), array('showdialog' => true, 'extrajs' => $result));
   }
 
   protected function redirect($url)

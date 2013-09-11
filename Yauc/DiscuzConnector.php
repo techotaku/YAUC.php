@@ -14,28 +14,6 @@ class DiscuzConnector
     CURLOPT_USERAGENT      => 'YAUC SSO Server',
     );
 
-  public function getSyncScripts($currentClient, $uid)
-  {
-    $clients = ServiceLocator::instance()->getService('clients');
-    $script = '';
-
-    foreach ($clients->getClients() as $name => $info) {
-      if ($name == $currentClient)
-      {
-        continue;
-      }
-      if ($info['type'] == 'discuz')
-      {
-        $time = (string) time();
-        $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($this->uc_authcode('action=synlogin&uid='.$uid.'&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
-      } else {
-        // TODO: 暂缺
-        }
-    }
-
-    return $script;
-  }
-
   public function register($user)
   {
     $clients = ServiceLocator::instance()->getService('clients');
@@ -60,7 +38,10 @@ class DiscuzConnector
     }
   }
 
-  protected function uc_authcode($string, $operation = 'DECODE', $key, $expiry = 0) {
+  /**
+   * 加密函数，直接从Discuz!中复制来
+   */
+  public function uc_authcode($string, $operation = 'DECODE', $key, $expiry = 0) {
 
     $ckey_length = 4; 
 
