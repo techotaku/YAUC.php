@@ -1,0 +1,11 @@
+--- original/class_member.php	2013-09-10 11:36:26.476071900 +0800
++++ client.discuz/class_member.php	2013-09-11 10:34:55.414100300 +0800
+@@ -209,6 +209,8 @@
+ 	}
+ 
+ 	function on_logout() {
++		header('Location: /sso.php?action=logout');
++		exit();
+ 		global $_G;
+ 
+ 		$ucsynlogout = $this->setting['allowsynlogin'] ? uc_user_synlogout() : '';

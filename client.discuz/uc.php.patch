@@ -1,0 +1,24 @@
+--- original/uc.php	2013-09-10 11:36:08.215246000 +0800
++++ client.discuz/uc.php	2013-09-11 10:34:58.347393600 +0800
+@@ -58,7 +58,7 @@
+ 	include_once DISCUZ_ROOT.'./uc_client/lib/xml.class.php';
+ 	$post = xml_unserialize(file_get_contents('php://input'));
+ 
+-	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
++	if(in_array($get['action'], array('test', 'registeruser', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
+ 		$uc_note = new uc_note();
+ 		echo $uc_note->$get['action']($get, $post);
+ 		exit();
+@@ -91,6 +91,12 @@
+ 		return API_RETURN_SUCCEED;
+ 	}
+ 
++	function registeruser($get, $post)
++	{
++		C::t('common_member')->insert($get['uid'], $get['username'], md5(random(10)), $get['email'], $get['clientip'], 10, array());
++		return API_RETURN_SUCCEED;
++	}
++
+ 	function deleteuser($get, $post) {
+ 		global $_G;
+ 		if(!API_DELETEUSER) {
