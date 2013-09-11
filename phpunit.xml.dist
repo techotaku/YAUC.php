@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./test/bootstrap.php">
+  <testsuites>
+    <testsuite name="YAUC BVT">
+      <directory suffix="Test.php">./test</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <file>./Yauc/ClientRepository.php</file>
+      <file>./Yauc/ConfigManager.php</file>
+      <file>./Yauc/DiscuzConnector.php</file>
+      <file>./Yauc/Router.php</file>
+      <file>./Yauc/ServiceLocator.php</file>
+      <file>./Yauc/TokenManager.php</file>
+      <file>./Yauc/UserRepository.php</file>
+    </whitelist>
+  </filter>
+</phpunit>
