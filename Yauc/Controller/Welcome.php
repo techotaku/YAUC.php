@@ -33,26 +33,47 @@ class Welcome extends Base
 
   protected function save()
   {
-    // 唯一性验证暂未处理。
+    $this->smarty = ServiceLocator::instance()->getService('smarty');
+    $this->smarty->assign('content', 'message.inc.tpl');
+    $this->smarty->assign('title', '注册 - Yet Another User Center');
+
     // TODO: 此处为简化处理。表单密码提交之前应加密。
     $username = $_POST['username'];
     $password = $_POST['password'];
     $email = $_POST['email'];
 
     $users = ServiceLocator::instance()->getService('users');
-    $id = $users->newUser($username, $email);
-    $users->newIdentityBasic($id, $email, $password);
 
-    $discuz = ServiceLocator::instance()->getService('discuz');
-    $user = array(
-      'uid' => $id,
-      'username' => $username,
-      'email' => $email);
-    $discuz->register($user);
+    $error = '';
+    if (!$users->checkUsernameAvailability($username))
+    {
+       $error .= '用户名不可用。';
+    }
+    if (!$users->checkEmailAvailability($email))
+    {
+       $error .= '邮件地址不可用。';
+    }
+    if ($password == '')
+    {
+       $error .= '密码不能为空。';
+    }
 
-    $this->smarty = ServiceLocator::instance()->getService('smarty');
-    $this->smarty->assign('content', 'message.inc.tpl');
-    $this->smarty->assign('title', '注册 - Yet Another User Center');
-    $this->smarty->assign('message', '注册成功。');
+    if ($error == '')
+    {
+      $id = $users->newUser($username, $email);
+      $users->newIdentityBasic($id, $email, $password);
+
+      $discuz = ServiceLocator::instance()->getService('discuz');
+      $user = array(
+        'uid' => $id,
+        'username' => $username,
+        'email' => $email);
+      $discuz->register($user);
+
+      $this->smarty->assign('message', '注册成功。');
+    } else {
+      $this->smarty->assign('message', '注册失败：'.$error);
+    }
+   
   }
 }

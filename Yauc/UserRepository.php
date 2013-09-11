@@ -13,6 +13,32 @@ class UserRepository
     ServiceLocator::instance()->getService('config')->db();
   }
 
+  public function checkUsernameAvailability($username)
+  {
+    $user = ORM::for_table('users')
+              ->where('username', $username)
+              ->find_one();
+    if ($user === FALSE)
+    {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
+  public function checkEmailAvailability($email)
+  {
+    $user = ORM::for_table('users')
+              ->where('email', $email)
+              ->find_one();
+    if ($user === FALSE)
+    {
+      return TRUE;
+    } else {
+      return FALSE;
+    }
+  }
+
   public function newUser($username, $email)
   {
     // TODO: 需要异常处理封装
