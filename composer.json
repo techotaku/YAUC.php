@@ -22,6 +22,7 @@
         "psr-0": {"Yauc\\": ""}
     },
     "require-dev": {
-        "fabpot/php-cs-fixer": "0.3.*@dev"
+        "fabpot/php-cs-fixer": "0.3.*@dev",
+        "satooshi/php-coveralls": "dev-master"
     }
 }

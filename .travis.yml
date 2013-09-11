@@ -6,11 +6,10 @@ php:
   - 5.5
 
 before_script:
-  - mkdir .deployment
-  - ./test/install-nginx.sh
-  - ./test/configure.sh
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm --fpm-config ./.deployment/php-fpm.conf
-  - ~/openresty/nginx/sbin/nginx
-  - sleep 3
+  - curl -s http://getcomposer.org/installer | php
+  - php composer.phar install --dev --prefer-source --no-interaction
 
-script: phpunit
+script: phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+  - php vendor/bin/coveralls -v
