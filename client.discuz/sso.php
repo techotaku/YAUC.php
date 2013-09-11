@@ -95,7 +95,7 @@ class SsoClient
   public function logout()
   {
     dsetcookie('auth', '', -31536000);
-    $this->redirect('http://sso.techotaku.net/Logout/demodz');    
+    $this->redirect('http://sso.techotaku.net/Logout/'.CLIENT);    
   }
 
   public function logout_callback()
