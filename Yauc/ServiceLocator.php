@@ -53,6 +53,20 @@ class ServiceLocator
     }
   }
 
+  public function setService($serviceName, $instance)
+  {
+    if (array_key_exists($serviceName, $this->registeredServices)) {
+      if ($instance instanceof $this->registeredServices[$serviceName]['class'])
+      {
+        $this->services[$serviceName] = $instance;
+      } else {
+        throw new \Exception('Specified object is not a valid instance of class / interface '.$this->registeredServices[$serviceName]['class'].'.');
+      }     
+    } else {
+      throw new \Exception('Cannot locate specified service: '.$serviceName.'. Service must be registered before inserted.');
+    }
+  }
+
   private function createServiceInstance($serviceName)
   {
     if (!array_key_exists($serviceName, $this->registeredServices)) {
