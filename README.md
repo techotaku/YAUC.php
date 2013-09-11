@@ -1,5 +1,5 @@
-# YAUC
-Yet Another User Center
+# Yet Another User Center
+[![Build Status](https://travis-ci.org/techotaku/YAUC.php.png?branch=master)](https://travis-ci.org/techotaku/YAUC.php) [![Coverage Status](https://coveralls.io/repos/techotaku/YAUC.php/badge.png?branch=master)](https://coveralls.io/r/techotaku/YAUC.php?branch=master)
 
 ## Overview
 一个PHP编写的单点登录和用户功能框架。
