@@ -27,7 +27,7 @@ class ClientRepository
   {
     if (!array_key_exists(strtolower($client), $this->clients))
     {
-      throw new \Exception('Specified client serivce "'.$client.'"" not found.');
+      throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
     return $this->clients[strtolower($client)]['secret'];
   }
@@ -36,7 +36,7 @@ class ClientRepository
   {
     if (!array_key_exists(strtolower($client), $this->clients))
     {
-      throw new \Exception('Specified client serivce "'.$client.'"" not found.');
+      throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
     $callback = $this->clients[strtolower($client)]['login'];
 
@@ -47,7 +47,7 @@ class ClientRepository
   {
     if (!array_key_exists(strtolower($client), $this->clients))
     {
-      throw new \Exception('Specified client serivce "'.$client.'"" not found.');
+      throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
 
     return $this->clients[strtolower($client)]['logout'];
