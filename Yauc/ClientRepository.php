@@ -69,7 +69,7 @@ class ClientRepository
         $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogin&uid='.$uid.'&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
       } else {
         // TODO: 暂缺
-        }
+      }
     }
 
     return $script;
@@ -91,7 +91,7 @@ class ClientRepository
         $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogout&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
       } else {
         // TODO: 暂缺
-        }
+      }
     }
 
     return $script;
