@@ -76,14 +76,10 @@ class ServiceLocator
     $className = $this->registeredServices[$serviceName]['class'];
     $parameters = $this->registeredServices[$serviceName]['parameters'];
     $reflect  = new \ReflectionClass($className);
+    // 若类不存在、类的构造函数不是public的、指定了参数而类不具有构造函数时，将抛出一个ReflectionException。
     $instance = $reflect->newInstanceArgs($parameters);
-    if (is_object($instance)) {
-      $this->services[$serviceName] = $instance;
-
-      return TRUE;
-    } else {
-      return FALSE;
-    }
+    $this->services[$serviceName] = $instance;
+    return TRUE;
   }
 
 }

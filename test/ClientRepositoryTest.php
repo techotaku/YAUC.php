@@ -105,5 +105,25 @@
       $this->assertEquals('meaningless', $this->clients->getLogoutCallbackUrl('whatever else'));
     }
 
+    public function testGetSyncLoginScripts()
+    {
+      $scripts = $this->clients->getSyncLoginScripts('', 0);
+      $this->assertEquals(2, substr_count($scripts, '<script type="text/javascript" src='));
+      $scripts = $this->clients->getSyncLoginScripts('dz2', 0);
+      $this->assertEquals(1, substr_count($scripts, '<script type="text/javascript" src='));
+      $this->assertEquals(1, substr_count($scripts, 'src="http://demodz.techotaku.net/api/uc.php?time='));
+      $this->assertEquals(0, substr_count($scripts, 'src="http://dz2.techotaku.net/api/uc.php?time='));
+    }
+
+    public function testGetSyncLogoutScripts()
+    {
+      $scripts = $this->clients->getSyncLogoutScripts('');
+      $this->assertEquals(2, substr_count($scripts, '<script type="text/javascript" src='));
+      $scripts = $this->clients->getSyncLogoutScripts('dz2');
+      $this->assertEquals(1, substr_count($scripts, '<script type="text/javascript" src='));
+      $this->assertEquals(1, substr_count($scripts, 'src="http://demodz.techotaku.net/api/uc.php?time='));
+      $this->assertEquals(0, substr_count($scripts, 'src="http://dz2.techotaku.net/api/uc.php?time='));
+    }
+
   }
 ?>
