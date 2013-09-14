@@ -33,7 +33,7 @@ __功能基本可用。仍在开发中。欢迎关注并贡献代码。__
 * [Demo Discuz! 1](http://demodz.techotaku.net/)
 * [Demo Discuz! 2](http://dz2.techotaku.net/)
 * [SSO Server Site](http://sso.techotaku.net/)
-    * [Register](http://sso.techotaku.net/welcome/resgister)
+    * [Register](http://sso.techotaku.net/welcome/register)
 
 #### 存在的测试用户：
 （也可以注册新用户测试。）
