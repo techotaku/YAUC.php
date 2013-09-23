@@ -25,17 +25,16 @@ class ClientRepository
 
   public function getSecret($client)
   {
-    if (!array_key_exists(strtolower($client), $this->clients))
-    {
+    if (!array_key_exists(strtolower($client), $this->clients)) {
       throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
+
     return $this->clients[strtolower($client)]['secret'];
   }
 
   public function getLoginCallbackUrl($client, $ticket)
   {
-    if (!array_key_exists(strtolower($client), $this->clients))
-    {
+    if (!array_key_exists(strtolower($client), $this->clients)) {
       throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
     $callback = $this->clients[strtolower($client)]['login'];
@@ -45,8 +44,7 @@ class ClientRepository
 
   public function getLogoutCallbackUrl($client)
   {
-    if (!array_key_exists(strtolower($client), $this->clients))
-    {
+    if (!array_key_exists(strtolower($client), $this->clients)) {
       throw new \Exception('Specified client serivce "'.$client.'" not found.');
     }
 
@@ -59,12 +57,10 @@ class ClientRepository
     $script = '';
 
     foreach ($this->clients as $name => $info) {
-      if ($name == $currentClient)
-      {
+      if ($name == $currentClient) {
         continue;
       }
-      if ($info['type'] == 'discuz')
-      {
+      if ($info['type'] == 'discuz') {
         $time = (string) time();
         $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogin&uid='.$uid.'&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
       } else {
@@ -81,12 +77,10 @@ class ClientRepository
     $script = '';
 
     foreach ($this->clients as $name => $info) {
-      if ($name == $currentClient)
-      {
+      if ($name == $currentClient) {
         continue;
       }
-      if ($info['type'] == 'discuz')
-      {
+      if ($info['type'] == 'discuz') {
         $time = (string) time();
         $script .= '<script type="text/javascript" src="'.$info['sync'].'?time='.$time.'&code='.urlencode($discuz->uc_authcode('action=synlogout&time='.$time, 'ENCODE', $info['secret'])).'" reload="1"></script>';
       } else {

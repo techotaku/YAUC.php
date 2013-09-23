@@ -30,10 +30,8 @@ class TokenManager
 
   public function isValidUser()
   {
-    if (($user = $this->getUserFromCookies()) != FALSE)
-    {
-      if (isset($user['sid']))
-      {
+    if (($user = $this->getUserFromCookies()) != FALSE) {
+      if (isset($user['sid'])) {
         return TRUE;
       }
     }
@@ -45,14 +43,11 @@ class TokenManager
   {
     // Tip: Token Manager 返回的user数组是带有sid和expire的，User Repository返回的user不带。
 
-    if ($this->user == NULL)
-    {
-      if (isset($_COOKIE[$this->key]))
-      {
+    if ($this->user == NULL) {
+      if (isset($_COOKIE[$this->key])) {
         $cookie = $_COOKIE[$this->key];
         $user = json_decode($cookie);
-        if (json_last_error() != JSON_ERROR_NONE)
-        {
+        if (json_last_error() != JSON_ERROR_NONE) {
           $this->user = FALSE;
         } else {
           $this->user = (array) $user;
@@ -67,8 +62,7 @@ class TokenManager
 
   public function initUser($sid, $uid, $username, $loginname, $expire = 0)
   {
-    if ($expire == 0)
-    {
+    if ($expire == 0) {
       $expire = time() + $this->expire;
     }
     $this->user = array(
@@ -81,18 +75,15 @@ class TokenManager
 
   public function saveCurrentSession($user = NULL)
   {
-    if ($user == NULL)
-    {
+    if ($user == NULL) {
       $user = $this->user;
     }
-    if ($user == NULL)
-    {
+    if ($user == NULL) {
       throw new \Exception('Cannot write unknown (NULL) user to browser.');
     }
 
     $cookie = json_encode($user);
-    if (json_last_error() != JSON_ERROR_NONE)
-    {
+    if (json_last_error() != JSON_ERROR_NONE) {
       return FALSE;
     }
     $session = ORM::for_table('sessions')->create();
@@ -106,8 +97,7 @@ class TokenManager
 
   public function clearCurrentSession()
   {
-    if ($this->user != NULL)
-    {
+    if ($this->user != NULL) {
       $session = ORM::for_table('sessions')->find_one($this->user['sid']);
       $session->delete();
     }
@@ -134,17 +124,18 @@ class TokenManager
   public function isValidTicket($ticket)
   {
     $t = ORM::for_table('tickets')->find_one($ticket);
-    if ($t === FALSE)
-    {
+    if ($t === FALSE) {
       // Ticket不存在
       return FALSE;
     } elseif (time() >= intval($t->expire)) {
       // Ticket已过期
       $t->delete();
+
       return FALSE;
     } else {
       // Ticket存在且仍然有效
       $t->delete();
+
       return $t->uid;
     }
   }

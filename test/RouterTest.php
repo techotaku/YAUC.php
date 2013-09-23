@@ -12,9 +12,10 @@
   /**
    * Router Test
    */
-  class RouterTest extends \PHPUnit_Framework_TestCase  {
-
-    public function testFull() {
+  class RouterTest extends \PHPUnit_Framework_TestCase
+  {
+    public function testFull()
+    {
       $_SERVER['REQUEST_URI'] = '/mycon/myact/var?qstring';
       $route = new Router();
 
@@ -24,7 +25,8 @@
       $this->assertEquals('qstring', $route->querystring);
     }
 
-    public function testFullWithBase() {
+    public function testFullWithBase()
+    {
       $_SERVER['REQUEST_URI'] = '/default.php/mycon/myact/var?qstring';
       $route = new Router('/default.php');
 
@@ -34,7 +36,8 @@
       $this->assertEquals('qstring', $route->querystring);
     }
 
-    public function testDefault() {
+    public function testDefault()
+    {
       $_SERVER['REQUEST_URI'] = '/';
       $route = new Router();
 
@@ -44,7 +47,8 @@
       $this->assertEquals('', $route->querystring);
     }
 
-    public function testDefaultWithBase() {
+    public function testDefaultWithBase()
+    {
       $_SERVER['REQUEST_URI'] = '/default.php';
       $route = new Router('/default.php');
 
@@ -55,4 +59,3 @@
     }
 
   }
-?>

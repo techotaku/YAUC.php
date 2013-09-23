@@ -10,7 +10,7 @@ class Welcome extends Base
   protected function before()
   {
     parent::before();
-    
+
     $this->smarty = ServiceLocator::instance()->getService('smarty');
   }
 
@@ -19,8 +19,7 @@ class Welcome extends Base
     $tokenMgr = ServiceLocator::instance()->getService('token');
     $this->smarty->assign('content', 'Welcome'.DIRECTORY_SEPARATOR.'index.inc.tpl');
     $this->smarty->assign('title', '首页 - Yet Another User Center');
-    if ($tokenMgr->isValidUser())
-    {
+    if ($tokenMgr->isValidUser()) {
       $this->smarty->assign('user', $tokenMgr->getUserFromCookies());
     }
   }
@@ -45,21 +44,17 @@ class Welcome extends Base
     $users = ServiceLocator::instance()->getService('users');
 
     $error = '';
-    if (!$users->checkUsernameAvailability($username))
-    {
+    if (!$users->checkUsernameAvailability($username)) {
        $error .= '用户名不可用。';
     }
-    if (!$users->checkEmailAvailability($email))
-    {
+    if (!$users->checkEmailAvailability($email)) {
        $error .= '邮件地址不可用。';
     }
-    if ($password == '')
-    {
+    if ($password == '') {
        $error .= '密码不能为空。';
     }
 
-    if ($error == '')
-    {
+    if ($error == '') {
       $id = $users->newUser($username, $email);
       $users->newIdentityBasic($id, $email, $password);
 
@@ -74,6 +69,6 @@ class Welcome extends Base
     } else {
       $this->smarty->assign('message', '注册失败：'.$error);
     }
-   
+
   }
 }

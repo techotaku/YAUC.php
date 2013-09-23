@@ -15,17 +15,15 @@ class Logout extends Base
     parent::before();
 
     $this->client = $this->route->action;
-    $this->route->action = 'auth'; 
+    $this->route->action = 'auth';
   }
 
   protected function auth()
   {
     $clients = ServiceLocator::instance()->getService('clients');
-    if ($clients->clientValid($this->client))
-    {
+    if ($clients->clientValid($this->client)) {
       $tokenMgr = ServiceLocator::instance()->getService('token');
-      if ($tokenMgr->isValidUser())
-      {
+      if ($tokenMgr->isValidUser()) {
         $tokenMgr->clearCurrentSession();
       }
       $this->redirect($clients->getLogoutCallbackUrl($this->client));
@@ -34,6 +32,5 @@ class Logout extends Base
       $this->redirect('/');
     }
   }
-
 
 }

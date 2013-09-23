@@ -12,7 +12,8 @@
   /**
    * ServiceLocator Test
    */
-  class ServiceLocatorTest extends \PHPUnit_Framework_TestCase  {
+  class ServiceLocatorTest extends \PHPUnit_Framework_TestCase
+  {
     protected $registeredServices;
     protected $services;
 
@@ -27,46 +28,49 @@
 
     private function getRegistered($instance = NULL)
     {
-      if ($instance == NULL)
-      {
+      if ($instance == NULL) {
         $instance = Yauc\ServiceLocator::instance();
       }
+
       return $this->registeredServices->getValue($instance);
     }
 
     private function getInstance($instance = NULL)
     {
-      if ($instance == NULL)
-      {
+      if ($instance == NULL) {
         $instance = Yauc\ServiceLocator::instance();
       }
+
       return $this->services->getValue($instance);
     }
 
-    public function testEmpty() {
+    public function testEmpty()
+    {
       $locator = new Yauc\ServiceLocator;
       $this->assertEquals(array(), $this->getRegistered($locator));
       $this->assertEquals(array(), $this->getInstance($locator));
     }
 
-    public function testInstance() {
+    public function testInstance()
+    {
       $locator = Yauc\ServiceLocator::instance();
       $this->assertSame($locator, Yauc\ServiceLocator::instance());
     }
 
-    public function testRegister() {
+    public function testRegister()
+    {
       $locator = new Yauc\ServiceLocator;
       $this->assertTrue($locator->registerService('name', 'Meaningless'));
       $this->assertEquals(
                array(
-                 'name' => array('class' => 'Meaningless', 'parameters' => array())), 
+                 'name' => array('class' => 'Meaningless', 'parameters' => array())),
                $this->getRegistered($locator));
       $this->assertFalse($locator->registerService('name', 'Meaningless'));
       $this->assertTrue($locator->registerService('new', 'Meaningless'));
       $this->assertEquals(
                array(
-                 'name' => array('class' => 'Meaningless', 'parameters' => array()), 
-                 'new' => array('class' => 'Meaningless', 'parameters' => array())), 
+                 'name' => array('class' => 'Meaningless', 'parameters' => array()),
+                 'new' => array('class' => 'Meaningless', 'parameters' => array())),
                $this->getRegistered($locator));
     }
 
@@ -129,7 +133,7 @@
       $ex = new \Exception();
       $locator->setService('name', $ex);
       $this->assertEquals(
-               array('name' => $ex), 
+               array('name' => $ex),
                $this->getInstance($locator));
     }
 
@@ -156,4 +160,3 @@
     }
 
   }
-?>

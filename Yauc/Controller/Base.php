@@ -45,8 +45,7 @@ class Base
   protected function after()
   {
     // 默认渲染layout模板，至少需要content模板文件名和title。
-    if (is_object($this->smarty))
-    {
+    if (is_object($this->smarty)) {
       $this->smarty->setTemplateDir(VIEW_DIR);
       $this->smarty->display('layout.tpl');
     }

@@ -13,7 +13,8 @@
   /**
    * ClientRepository Test
    */
-  class ClientRepositoryTest extends \PHPUnit_Framework_TestCase  {
+  class ClientRepositoryTest extends \PHPUnit_Framework_TestCase
+  {
     protected $clientscfg = array(
       'demodz' => array(
         'secret' => 'j0lbtf',
@@ -51,7 +52,8 @@
       $this->clients = $locator->getService('clients');
     }
 
-    public function testGetClients() {
+    public function testGetClients()
+    {
       $this->assertEquals($this->clientscfg, $this->clients->getClients());
     }
 
@@ -62,7 +64,8 @@
       $this->assertFalse($this->clients->clientValid('whatever else'));
     }
 
-    public function testGetSecret() {
+    public function testGetSecret()
+    {
       $this->assertEquals('j0lbtf', $this->clients->getSecret('demodz'));
       $this->assertEquals('d8p4Ue', $this->clients->getSecret('dz2'));
     }
@@ -71,14 +74,16 @@
      * @expectedException        Exception
      * @expectedExceptionMessage Specified client serivce "whatever else" not found.
      */
-    public function testGetSecretException() {
+    public function testGetSecretException()
+    {
       $this->assertEquals('meaningless', $this->clients->getSecret('whatever else'));
     }
 
-    public function testGetLoginCallbackUrl() {
-      $this->assertEquals('http://demodz.techotaku.net/sso.php?action=login_callback&ticket=you-are-ticket', 
+    public function testGetLoginCallbackUrl()
+    {
+      $this->assertEquals('http://demodz.techotaku.net/sso.php?action=login_callback&ticket=you-are-ticket',
                $this->clients->getLoginCallbackUrl('demodz', 'you-are-ticket'));
-      $this->assertEquals('http://dz2.techotaku.net/sso.php?action=login_callback&ticket=you-are-the-ticket', 
+      $this->assertEquals('http://dz2.techotaku.net/sso.php?action=login_callback&ticket=you-are-the-ticket',
                $this->clients->getLoginCallbackUrl('dz2', 'you-are-the-ticket'));
     }
 
@@ -86,14 +91,16 @@
      * @expectedException        Exception
      * @expectedExceptionMessage Specified client serivce "whatever else" not found.
      */
-    public function testGetLoginCallbackUrlException() {
+    public function testGetLoginCallbackUrlException()
+    {
       $this->assertEquals('meaningless', $this->clients->getLoginCallbackUrl('whatever else', 'you-are-the-fucking-ticket'));
     }
 
-    public function testGetLogoutCallbackUrl() {
-      $this->assertEquals('http://demodz.techotaku.net/sso.php?action=logout_callback', 
+    public function testGetLogoutCallbackUrl()
+    {
+      $this->assertEquals('http://demodz.techotaku.net/sso.php?action=logout_callback',
                $this->clients->getLogoutCallbackUrl('demodz'));
-      $this->assertEquals('http://dz2.techotaku.net/sso.php?action=logout_callback', 
+      $this->assertEquals('http://dz2.techotaku.net/sso.php?action=logout_callback',
                $this->clients->getLogoutCallbackUrl('dz2'));
     }
 
@@ -101,7 +108,8 @@
      * @expectedException        Exception
      * @expectedExceptionMessage Specified client serivce "whatever else" not found.
      */
-    public function testGetLogoutCallbackUrlException() {
+    public function testGetLogoutCallbackUrlException()
+    {
       $this->assertEquals('meaningless', $this->clients->getLogoutCallbackUrl('whatever else'));
     }
 
@@ -126,4 +134,3 @@
     }
 
   }
-?>

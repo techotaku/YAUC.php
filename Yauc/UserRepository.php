@@ -18,8 +18,7 @@ class UserRepository
     $user = ORM::for_table('users')
               ->where('username', $username)
               ->find_one();
-    if ($user === FALSE)
-    {
+    if ($user === FALSE) {
       return TRUE;
     } else {
       return FALSE;
@@ -31,8 +30,7 @@ class UserRepository
     $user = ORM::for_table('users')
               ->where('email', $email)
               ->find_one();
-    if ($user === FALSE)
-    {
+    if ($user === FALSE) {
       return TRUE;
     } else {
       return FALSE;
@@ -48,6 +46,7 @@ class UserRepository
     // email的唯一性验证需要在Controller中完成
     $user->set('email', $email);
     $user->save();
+
     return $user->id();
   }
 
@@ -72,13 +71,13 @@ class UserRepository
     $identity = ORM::for_table('identity_basic')
       ->where('loginname', $loginname)
       ->find_one();
-    if ($identity === FALSE)
-    {
+    if ($identity === FALSE) {
       return FALSE;
     }
 
     $salt = $identity->salt;
     $pwd = $identity->password;
+
     return $pwd == hash('sha256', $salt.$password);
   }
 
@@ -88,10 +87,10 @@ class UserRepository
       ->where('loginname', $loginname)
       ->join('users', array('identity_basic.uid', '=', 'users.uid'))
       ->find_one();
-    if ($user === FALSE)
-    {
+    if ($user === FALSE) {
       return FALSE;
     }
+
     return array(
       'uid' => $user->id(),
       'username' => $user->username,
@@ -101,10 +100,10 @@ class UserRepository
   public function getUserById($uid)
   {
     $user = ORM::for_table('users')->find_one($uid);
-    if ($user === FALSE)
-    {
+    if ($user === FALSE) {
       return FALSE;
     }
+
     return array(
       'uid' => $user->id(),
       'username' => $user->username,

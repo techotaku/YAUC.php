@@ -13,8 +13,7 @@ class Login extends Base
     $this->smarty = ServiceLocator::instance()->getService('smarty');
 
     $tokenMgr = ServiceLocator::instance()->getService('token');
-    if ($tokenMgr->isValidUser())
-    {
+    if ($tokenMgr->isValidUser()) {
       // 已登陆。跳转回首页
       $this->redirect('/');
     }
@@ -34,12 +33,10 @@ class Login extends Base
     $password = $_POST['password'];
     $client = $_POST['client'];
 
-    $clients = ServiceLocator::instance()->getService('clients');    
-    if ($clients->clientValid($client))
-    {
+    $clients = ServiceLocator::instance()->getService('clients');
+    if ($clients->clientValid($client)) {
       $users = ServiceLocator::instance()->getService('users');
-      if ($users->validateBasic($loginname, $password))
-      {
+      if ($users->validateBasic($loginname, $password)) {
         $tokenMgr = ServiceLocator::instance()->getService('token');
 
         // 从数据库读取用户信息
@@ -50,8 +47,7 @@ class Login extends Base
         $sid = 's'.substr(uniqid(rand()), -3).'-'.time().'-'.$_SERVER['REMOTE_ADDR'].'-'.$user['uid'];
         // 编码，一个蛋疼的基于base64的混淆处理，编码后长度最长约70位，MySQL表该字段预留80位
         $sid = base64_encode($sid);
-        if (substr($sid, -2) == '==')
-        {
+        if (substr($sid, -2) == '==') {
           $sid = rtrim($sid, '=');
           $sid = $sid.'.5';
         } elseif (substr($sid, -1) == '=') {
@@ -60,7 +56,6 @@ class Login extends Base
         } else {
           $sid = $sid.'.6';
         }
-        
 
         $tokenMgr->initUser($sid, $user['uid'], $user['username'], $loginname);
         $tokenMgr->saveCurrentSession();

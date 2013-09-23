@@ -22,12 +22,10 @@ class Api extends Base
 
     $signArray = array($secret, $timestamp, $nonce);
     sort($signArray);
-    if (sha1(implode($signArray)) == $signature)
-    {
+    if (sha1(implode($signArray)) == $signature) {
       $tokenMgr = ServiceLocator::instance()->getService('token');
       // 效验Ticket，同时删除Ticket
-      if (($uid = $tokenMgr->isValidTicket($ticket)) === FALSE)
-      {
+      if (($uid = $tokenMgr->isValidTicket($ticket)) === FALSE) {
         echo '指定的Ticket无效。';
       } else {
         $users = ServiceLocator::instance()->getService('users');
@@ -53,8 +51,7 @@ class Api extends Base
 
     $signArray = array($secret, $timestamp, $nonce);
     sort($signArray);
-    if (sha1(implode($signArray)) == $signature)
-    {
+    if (sha1(implode($signArray)) == $signature) {
       echo $clients->getSyncLogoutScripts($client);
     } else {
       echo '请求非法。';
